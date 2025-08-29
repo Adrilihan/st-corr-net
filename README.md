@@ -5,13 +5,21 @@ This repo was the result of the final project of the curriculum unit [Time and S
 
 To showcase the methodology HIV/AIDS infection data across the African continent [^2] was chosen as a case study where the following weighted graph was obtained.
 
-![Graph representation of spatial correlations in HIV infection rates in Africa from 1990 to 2019.]()
-*Graph representation of spatial correlations in HIV infection rates in Africa from 1990 to 2019.*
+<p align="center">
+  <img 
+    style="display: block; 
+           margin-left: auto;
+           margin-right: auto;
+           width: 50%;
+           height: 50%;"
+    src="https://github.com/user-attachments/assets/eca6c1e7-f913-4b6e-a9d5-4327fe915c7b" 
+    alt="Graph representation of spatial correlations in HIV infection rates in Africa from 1990 to 2019.">
+</p>
 
 where
 
 - **Nodes** represent countries.
-- **Edges** represent spatial correlations in HIV infection rates.
+- **Edges** represent spatial correlations in HIV infection rates from 1990 to 2019.
 - **Weights** quantify the strength of correlation.
 
 With such graph it's possible to visually indentify clusters of correlation and define a cut-off value to descard the connection iproving the definition of the neighboring matrix that can be used for instance with VAR models.
@@ -39,3 +47,4 @@ the notebook where the graph representation is created is the `Africa_HIV.ipynb`
 [^1]: Sergio J. Rey, Dani Arribas-Bel, and Levi J. Wolf (2023) — “Geographic Data Science with Python” Published online at GeographicData.Science. Retrieved from: '<https://geographicdata.science/book/intro.html>' [Online Resource]
 
 [^2]: Max Roser and Hannah Ritchie (2023) - “HIV / AIDS” Published online at OurWorldInData.org. Retrieved from: '<https://web.archive.org/web/20240604204631/https://ourworldindata.org/hiv-aids>' [Online Resource]
+
