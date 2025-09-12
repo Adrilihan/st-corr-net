@@ -24,14 +24,14 @@ def main(
     logger.info("Downloading raw data...")
 
     variables = {
-        "New HIV infections (cases)": 744590,
         "People living with HIV": 744591,
+        "New HIV infections (cases)": 744590,
         "Deaths from HIV/AIDS": 758076
     }
-    hashes = ("sha256:8d0ac7b2b74b80e9dfee875fb9bf5c3d3321b92a5c655bd6a5f55e31b14f4411",
-              "sha256:20c87f0d14ef67b6ae8730eed01cdc65cbdaf902cf78cdaefa3a50b06892cdc2",
-              "sha256:456c962f053a9a87a9464aff84a68612eb938ae205f93db9026507043a19bd38",
+    hashes = ("sha256:456c962f053a9a87a9464aff84a68612eb938ae205f93db9026507043a19bd38",
               "sha256:46e0123df1b13e57c65df39378df18d049b4667b99fdca9439ab9dc6971cbdf6",
+              "sha256:8d0ac7b2b74b80e9dfee875fb9bf5c3d3321b92a5c655bd6a5f55e31b14f4411",
+              "sha256:20c87f0d14ef67b6ae8730eed01cdc65cbdaf902cf78cdaefa3a50b06892cdc2",
               "sha256:a7ba2f46603b0d1f3c1de9ee970d1b1f9a586f4f43b0b3c07706161edb3312a8",
               "sha256:901609c8dff235abb9e1d1662a4279dc65a932de23be01eab4398ef63c33c15d",)
 
