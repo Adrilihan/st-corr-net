@@ -1,8 +1,13 @@
+from functools import reduce
 from pathlib import Path
+import pooch
 
 from loguru import logger
 from tqdm import tqdm
 import typer
+
+import json
+import pandas as pd
 
 from st_corr_net.config import PROCESSED_DATA_DIR, EXTERNAL_DATA_DIR, RAW_DATA_DIR
 
@@ -16,7 +21,6 @@ def main(
     output_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     # ----------------------------------------------
 ):
-    import pooch
     logger.info("Downloading raw data...")
 
     variables = {
@@ -46,13 +50,13 @@ def main(
         # The registry specifies the files that will be fetched
         registry=registry,
     )
-    fnames = list(map(lambda x: odie.fetch(x, progressbar=True), registry.keys()))
+    raw_file_paths = list(map(lambda x: odie.fetch(x, progressbar=True), registry.keys()))
     
     logger.success("Downloading raw data complete.")
 
 
     logger.info("Downloading external data (spatial)...")
-    file_path = pooch.retrieve(
+    external_file_path = pooch.retrieve(
         url="https://services6.arcgis.com/zOnyumh63cMmLBBH/arcgis/rest/services/Africa_Countries/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson",
         known_hash="sha256:007596f84a52b0f7a33f3fd7108ce665fb3edc1c23189063eddf7b72e124ee33",
         fname="africa_countries.geojson",
@@ -64,7 +68,27 @@ def main(
 
 
     logger.info("Processing dataset...")
-    #TODO: Add processing
+    # Carregar todos os dados
+    data_frames = []
+    for i in range(0, len(raw_file_paths), 2):
+        # Files must be read in pairs: data + metadata
+        df = pd.read_json(raw_file_paths[i])
+        with open(raw_file_paths[i+1]) as f: metadata = json.load(f)
+        md_df = pd.DataFrame(metadata["dimensions"]['entities']['values'])
+        merged_df = pd.merge(df, md_df, left_on='entities', right_on='id')
+
+        cols = merged_df.columns.tolist()
+        new_order = ['name', 'code', 'years', 'values', 'entities']
+        merged_df = merged_df[new_order]
+
+        merged_df.columns = ['Entitie', 'Code', 'Year', metadata['name'], 'Id']
+        data_frames.append(merged_df)
+
+    final_df = reduce(lambda left, right: pd.merge(left, right, on=['Entitie', 'Code', 'Year', "Id"]), data_frames)
+
+    final_df.pop('Id')
+    final_df.to_csv(PROCESSED_DATA_DIR / 'deaths-and-new-cases-of-hiv.csv', index=False)
+
     logger.success("Processing dataset complete.")
 
 
