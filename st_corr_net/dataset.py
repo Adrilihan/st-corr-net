@@ -4,7 +4,7 @@ from loguru import logger
 from tqdm import tqdm
 import typer
 
-from st_corr_net.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
+from st_corr_net.config import PROCESSED_DATA_DIR, EXTERNAL_DATA_DIR, RAW_DATA_DIR
 
 app = typer.Typer()
 
@@ -16,13 +16,56 @@ def main(
     output_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     # ----------------------------------------------
 ):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
+    import pooch
+    logger.info("Downloading raw data...")
+
+    variables = {
+        "New HIV infections (cases)": 744590,
+        "People living with HIV": 744591,
+        "Deaths from HIV/AIDS": 758076
+    }
+    hashes = ("sha256:8d0ac7b2b74b80e9dfee875fb9bf5c3d3321b92a5c655bd6a5f55e31b14f4411",
+              "sha256:20c87f0d14ef67b6ae8730eed01cdc65cbdaf902cf78cdaefa3a50b06892cdc2",
+              "sha256:456c962f053a9a87a9464aff84a68612eb938ae205f93db9026507043a19bd38",
+              "sha256:46e0123df1b13e57c65df39378df18d049b4667b99fdca9439ab9dc6971cbdf6",
+              "sha256:a7ba2f46603b0d1f3c1de9ee970d1b1f9a586f4f43b0b3c07706161edb3312a8",
+              "sha256:901609c8dff235abb9e1d1662a4279dc65a932de23be01eab4398ef63c33c15d",)
+
+    i = 0   # index for hashes tuple
+    registry = dict()
+    for name, var_id in variables.items():
+        for kind in ["data", "metadata"]:
+            filename = f"{var_id}.{kind}.json"
+            file_hash = hashes[i]
+            registry[filename] = file_hash
+            i += 1
+
+    odie = pooch.create(
+        path=RAW_DATA_DIR,
+        base_url="https://web.archive.org/web/20240604204632/https://api.ourworldindata.org/v1/indicators",
+        # The registry specifies the files that will be fetched
+        registry=registry,
+    )
+    fnames = list(map(lambda x: odie.fetch(x, progressbar=True), registry.keys()))
+    
+    logger.success("Downloading raw data complete.")
+
+
+    logger.info("Downloading external data (spatial)...")
+    file_path = pooch.retrieve(
+        url="https://services6.arcgis.com/zOnyumh63cMmLBBH/arcgis/rest/services/Africa_Countries/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson",
+        known_hash="sha256:007596f84a52b0f7a33f3fd7108ce665fb3edc1c23189063eddf7b72e124ee33",
+        fname="africa_countries.geojson",
+        path=EXTERNAL_DATA_DIR,
+        progressbar=True
+    )
+    
+    logger.success("Downloading external data complete.")
+
+
     logger.info("Processing dataset...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
+    #TODO: Add processing
     logger.success("Processing dataset complete.")
-    # -----------------------------------------
 
 
 if __name__ == "__main__":
