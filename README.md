@@ -35,6 +35,32 @@ The methodology is applicable beyond epidemiology, with potential use cases in e
 
 - African countries geometries from [RCRMD Open Data Portal – Africa Countries Dataset](https://opendata.rcmrd.org/datasets/rcmrd::africa-countries-dataset/about)
 
+## Setup
+
+To run this project, you need to have the following tools installed:
+
+- Anaconda
+- Make
+
+> [!NOTE]
+> A VSCode `settings.json` file with Anaconda terminal profile was created for easier use yet it assumes you installed the **Miniconda** version.  
+> If you installed the **Anaconda distribution**, you’ll need to manually change the default terminal to the Anaconda one.
+
+The environment is created by running in the Anaconda terminal:
+
+```sh
+make create_enviroment
+```
+
+To fetch the data, run:
+
+```sh
+conda activate st-corr-net
+make data
+```
+
+With that, the notebooks should be runnable
+
 ## Project Organization
 
 ```
@@ -82,16 +108,6 @@ The methodology is applicable beyond epidemiology, with potential use cases in e
     │
     └── plots.py                <- Code to create visualizations
 ```
-
-## Installation
-
-The project uses conda so after cloning the repo you just need to replicate the enviroment with
-
-```pwsh
-conda env create -f environment.yml
-```
-
-the notebook where the graph representation is created is the `Africa_HIV.ipynb`. The name of the data files should be `deaths-and-new-cases-of-hiv.csv` and `Africa_Countries_Dataset.geojson` for the [Our World in Data – HIV/AIDS](https://web.archive.org/web/20240604204632/https://ourworldindata.org/grapher/deaths-and-new-cases-of-hiv) and [RCRMD Open Data Portal – Africa Countries Dataset](https://opendata.rcmrd.org/datasets/rcmrd::africa-countries-dataset/about) respectively.
 
 ## References
 
