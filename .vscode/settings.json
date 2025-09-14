@@ -1,0 +1,23 @@
+{
+    "terminal.integrated.defaultProfile.windows": "Anaconda PowerShell Prompt (miniconda3)",
+    "terminal.integrated.profiles.windows": {
+        "Anaconda PowerShell Prompt (miniconda3)": {
+            "path": "${env:windir}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "args": ["-ExecutionPolicy", 
+                     "ByPass",
+                     "-NoExit",
+                     "-Command", 
+                     "& '${env:userprofile}\\miniconda3\\shell\\condabin\\conda-hook.ps1' ; conda activate '${env:userprofile}\\miniconda3'"],
+            "icon": "terminal-powershell",
+        },
+        "Anaconda PowerShell Prompt (anaconda3)": {
+            "path": "${env:windir}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "args": ["-ExecutionPolicy", 
+                     "ByPass",
+                     "-NoExit",
+                     "-Command", 
+                     "& '${env:userprofile}\\anaconda3\\shell\\condabin\\conda-hook.ps1' ; conda activate '${env:userprofile}\\anaconda3'"],
+            "icon": "terminal-powershell",
+        },
+    }
+}
